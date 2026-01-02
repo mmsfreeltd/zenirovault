@@ -1,28 +1,26 @@
 // app/admin/admin-banks/page.tsx
-import { NextResponse } from "next/server";
-import { db } from "@/db";
-import { requireSession } from "@/server/lib/secure";
-import dynamic from "next/dynamic";
+import { db } from '@/db';
+import dynamic from 'next/dynamic';
+import { requireSessionPage } from '@/server/lib/secure/pageSecure';
 
 const AddAdminBankModal = dynamic(
-  () => import("@/components/admin/admin-banks/add-admin-bank-modal")
+  () => import('@/components/admin/admin-banks/add-admin-bank-modal')
 );
 const AdminBankTable = dynamic(
-  () => import("@/components/admin/admin-banks/admin-bank-table")
+  () => import('@/components/admin/admin-banks/admin-bank-table')
 );
 
 export const revalidate = 0;
 
 export default async function AdminBanksPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+  await requireSessionPage('admin');
 
   let list;
   try {
     list = await db.query.admin_banks.findMany();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    throw new Error("Failed to load banks: " + err.message);
+    throw new Error('Failed to load banks: ' + err.message);
   }
 
   return (

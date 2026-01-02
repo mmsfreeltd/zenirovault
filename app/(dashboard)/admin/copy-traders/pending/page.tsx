@@ -1,19 +1,17 @@
 // app/admin/copy-traders/pending/page.tsx
-import { NextResponse } from "next/server";
-import { requireSession } from "@/server/lib/secure";
-import { db } from "@/db";
-import { client_expert, clients, experts, cryptos } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { db } from '@/db';
+import { client_expert, clients, experts, cryptos } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
 import {
   PendingCopy,
   PendingCopyTable,
-} from "@/components/admin/experts/PendingCopyTable";
+} from '@/components/admin/experts/PendingCopyTable';
+import { requireSessionPage } from '@/server/lib/secure/pageSecure';
 
 export const revalidate = 0;
 
 export default async function PendingCopyPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+  await requireSessionPage('admin');
 
   const pending = await db
     .select({

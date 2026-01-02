@@ -1,24 +1,22 @@
 // app/admin/copy-traders/page.tsx
-import { NextResponse } from "next/server";
-import { db } from "@/db";
-import { requireSession } from "@/server/lib/secure";
-import dynamic from "next/dynamic";
+import { db } from '@/db';
+import { requireSessionPage } from '@/server/lib/secure/pageSecure';
+import dynamic from 'next/dynamic';
 
 // Import your client components
 const ExpertTable = dynamic(
-  () => import("@/components/admin/experts/expert-table"),
+  () => import('@/components/admin/experts/expert-table'),
   {}
 );
 const AddExpertModal = dynamic(
-  () => import("@/components/admin/experts/add-expert-modal")
+  () => import('@/components/admin/experts/add-expert-modal')
 );
 
 export const revalidate = 0; // no caching
 
 export default async function CopyTradersPage() {
   // 1️⃣ Enforce admin session
-  const authResult = await requireSession("admin");
-  if (authResult instanceof NextResponse) return authResult;
+  await requireSessionPage('admin');
 
   let expertList;
   try {
@@ -27,7 +25,7 @@ export default async function CopyTradersPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     // Throw to be caught by error.tsx
-    throw new Error("Failed to load experts: " + err.message);
+    throw new Error('Failed to load experts: ' + err.message);
   }
 
   // 3️⃣ Render the page
