@@ -1,4 +1,6 @@
 import { SITE_NAME } from '@/global/constants';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -75,7 +77,8 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-          <button
+          <Link
+            href="login"
             className="
               px-8 py-4 rounded-xl
               bg-linear-to-r from-purple-500 to-orange-500
@@ -84,9 +87,10 @@ export default function Hero() {
             "
           >
             Login Account
-          </button>
+          </Link>
 
-          <button
+          <Link
+            href="register"
             className="
               px-8 py-4 rounded-xl
               border
@@ -97,14 +101,16 @@ export default function Hero() {
             "
           >
             Create Account
-          </button>
+          </Link>
         </div>
 
         {/* Social proof */}
         <div className="mt-10 flex flex-col items-center gap-3">
           <div className="flex -space-x-2">
             {[...Array(8)].map((_, i) => (
-              <img
+              <Image
+                width={20}
+                height={20}
                 key={i}
                 src={`https://i.pravatar.cc/40?img=${i + 10}`}
                 alt="user"
