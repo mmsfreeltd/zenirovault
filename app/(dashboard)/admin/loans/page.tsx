@@ -2,15 +2,13 @@
 import { db } from "@/db";
 import { loans, clients } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
-import { NextResponse } from "next/server";
-import { requireSession } from "@/server/lib/secure";
 import { AdminLoanTable } from "@/components/admin/loans/AdminLoanTable";
+import { requireSessionPage } from "@/server/lib/secure/pageSecure";
 
 export const revalidate = 0;
 
 export default async function AdminLoansPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+await requireSessionPage("admin");
 
   const all = await db
     .select({

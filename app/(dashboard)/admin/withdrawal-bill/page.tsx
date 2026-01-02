@@ -1,11 +1,10 @@
 // app/admin/withdraw-bill/page.tsx
-import { NextResponse } from "next/server";
 import dynamic from "next/dynamic";
 import { db } from "@/db";
 import { transfer_codes, clients } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { requireSession } from "@/server/lib/secure";
 import { WithdrawBillDisplayType } from "@/types";
+import { requireSessionPage } from "@/server/lib/secure/pageSecure";
 
 const AddWithdrawBillModal = dynamic(
   () => import("@/components/admin/withdraw-bill/add-withdraw-bill-modal")
@@ -17,8 +16,7 @@ const WithdrawBillTable = dynamic(
 export const revalidate = 0;
 
 export default async function WithdrawBillPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+ await requireSessionPage("admin");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let list: Array<any>;

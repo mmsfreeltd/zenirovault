@@ -1,9 +1,8 @@
 // app/admin/upgrade-plan/page.tsx
-import { NextResponse } from "next/server";
 import dynamic from "next/dynamic";
 import { db } from "@/db";
-import { requireSession } from "@/server/lib/secure";
 import { PlanType } from "@/types";
+import { requireSessionPage } from "@/server/lib/secure/pageSecure";
 
 const AddUpgradePlanModal = dynamic(
   () => import("@/components/admin/upgrade-plan/add-upgrade-plan-modal")
@@ -15,8 +14,7 @@ const PlanTable = dynamic(
 export const revalidate = 0;
 
 export default async function UpgradePlanPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+await requireSessionPage("admin");
 
   let list: PlanType[];
   try {

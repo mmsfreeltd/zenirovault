@@ -1,13 +1,13 @@
 // app/admin/user/[id]/page.tsx
-import { notFound } from "next/navigation";
-import { requireSession } from "@/server/lib/secure";
-import { db } from "@/db";
-import { clients } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import UserProfileHeader from "@/components/admin/users/UserProfileHeader";
-import UserDetailTabs from "@/components/admin/users/UserDetailTabs";
-import UserQuickActions from "@/components/admin/users/UserQuickActions";
-import { UserProvider } from "@/context/UserContext";
+import { notFound } from 'next/navigation';
+import { db } from '@/db';
+import { clients } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import UserProfileHeader from '@/components/admin/users/UserProfileHeader';
+import UserDetailTabs from '@/components/admin/users/UserDetailTabs';
+import UserQuickActions from '@/components/admin/users/UserQuickActions';
+import { UserProvider } from '@/context/UserContext';
+import { requireSessionPage } from '@/server/lib/secure/pageSecure';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,7 +16,7 @@ interface Props {
 export const revalidate = 0;
 
 export default async function UserPage(props: Props) {
-  await requireSession("admin");
+  await requireSessionPage('admin');
   const params = await props.params;
 
   const id = parseInt(params.id, 10);

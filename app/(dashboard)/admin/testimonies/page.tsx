@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/admin/testimonies/page.tsx
-import { requireSession } from "@/server/lib/secure";
-import { db } from "@/db";
-
-import AdminTestimonyTable from "@/components/admin/testimonies/TestimonyTable";
-import { desc } from "drizzle-orm";
-import { testimonies } from "@/db/schema";
+import { db } from '@/db';
+import AdminTestimonyTable from '@/components/admin/testimonies/TestimonyTable';
+import { desc } from 'drizzle-orm';
+import { testimonies } from '@/db/schema';
+import { requireSessionPage } from '@/server/lib/secure/pageSecure';
 
 export const revalidate = 0;
 
 export default async function TestimoniesPage() {
   // 1) Ensure admin is logged in
-  const auth = await requireSession("admin");
-  if (auth instanceof Response) return auth;
+  await requireSessionPage('admin');
 
   // 2) Fetch all testimonies
   const all = await db.query.testimonies.findMany({

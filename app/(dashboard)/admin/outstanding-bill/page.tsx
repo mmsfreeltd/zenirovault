@@ -1,11 +1,10 @@
 // app/admin/outstanding-bill/page.tsx
-import { NextResponse } from "next/server";
 import dynamic from "next/dynamic";
 import { db } from "@/db";
 import { outstanding_fees, clients } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { requireSession } from "@/server/lib/secure";
 import { OutstandingBillDisplay } from "@/types";
+import { requireSessionPage } from "@/server/lib/secure/pageSecure";
 
 const AddOutstandingBillModal = dynamic(
   () => import("@/components/admin/outstanding-bill/add-outstanding-bill-modal")
@@ -17,8 +16,7 @@ const OutstandingBillTable = dynamic(
 export const revalidate = 0;
 
 export default async function OutstandingBillPage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+ await requireSessionPage("admin");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let list: Array<any>;

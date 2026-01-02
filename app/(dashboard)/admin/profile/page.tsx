@@ -1,17 +1,15 @@
 // app/admin/profile/page.tsx
-import { NextResponse } from "next/server";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SecurityForm } from "@/components/admin/profile/SecurityForm";
 import { PlatformSettingsForm } from "@/components/admin/profile/PlatformSettingsForm";
 import { db } from "@/db";
-import { requireSession } from "@/server/lib/secure";
 import { settings } from "@/db/schema";
+import { requireSessionPage } from "@/server/lib/secure/pageSecure";
 
 export const revalidate = 0;
 
 export default async function ProfilePage() {
-  const auth = await requireSession("admin");
-  if (auth instanceof NextResponse) return auth;
+ await requireSessionPage("admin");
 
   const adm = await db.query.admin.findFirst();
   let sett = await db.query.settings.findFirst();
