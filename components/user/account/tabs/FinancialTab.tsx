@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   BarChart,
   Bar,
@@ -21,8 +21,8 @@ import {
   Pie,
   Cell,
   Legend,
-} from "recharts";
-import { format, parseISO } from "date-fns";
+} from 'recharts';
+import { format, parseISO } from 'date-fns';
 import {
   ArrowDownCircle,
   ArrowUpCircle,
@@ -37,10 +37,10 @@ import {
   Clock,
   Loader2,
   PieChartIcon,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -49,21 +49,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { TransactionType } from "@/types";
-import axios from "axios";
-import Link from "next/link";
-import { useUser } from "@/context/AuthUserContext";
+} from '@/components/ui/table';
+import { TransactionType } from '@/types';
+import axios from 'axios';
+import Link from 'next/link';
+import { useUser } from '@/context/AuthUserContext';
 
 // Colors for pie chart
-const COLORS = ["#FF8042", "#0088FE", "#00C49F", "#FFBB28"];
+const COLORS = ['#FF8042', '#0088FE', '#00C49F', '#FFBB28'];
 
 // Utility function to format currency
-const formatCurrency = (amount: number | string, currency: string = "USD") => {
-  const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
+const formatCurrency = (
+  amount: number | string | undefined,
+  currency: string = 'USD'
+) => {
+  const numAmount =
+    amount == null || isNaN(Number(amount)) ? 0 : Number(amount);
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
     currency,
   }).format(numAmount);
 };
@@ -72,16 +76,16 @@ const formatCurrency = (amount: number | string, currency: string = "USD") => {
 export const TransactionIcon = ({
   type,
 }: {
-  type: TransactionType["type"];
+  type: TransactionType['type'];
 }) => {
   switch (String(type).toLowerCase()) {
-    case "deposit":
+    case 'deposit':
       return <ArrowDownCircle className="h-4 w-4 text-green-500" />;
-    case "withdrawal":
+    case 'withdrawal':
       return <ArrowUpCircle className="h-4 w-4 text-red-500" />;
-    case "bonus":
+    case 'bonus':
       return <Gift className="h-4 w-4 text-amber-500" />;
-    case "trade":
+    case 'trade':
       return <CircleDollarSign className="h-4 w-4 text-blue-500" />;
     default:
       return <Wallet className="h-4 w-4" />;
@@ -92,22 +96,22 @@ export const TransactionIcon = ({
 export const TransactionStatusBadge = ({
   status,
 }: {
-  status: TransactionType["status"];
+  status: TransactionType['status'];
 }) => {
   switch (status) {
-    case "Successful":
+    case 'Successful':
       return (
         <Badge variant="outline" className="border-green-500 text-green-600">
           Successful
         </Badge>
       );
-    case "Pending":
+    case 'Pending':
       return (
         <Badge variant="outline" className="border-amber-500 text-amber-600">
           Pending
         </Badge>
       );
-    case "Cancelled":
+    case 'Cancelled':
       return (
         <Badge variant="outline" className="border-red-500 text-red-600">
           Cancelled
@@ -126,7 +130,7 @@ export type AccountSummary = {
 
 export default function FinancialTab() {
   const { client } = useUser();
-  const [chartType, setChartType] = useState<"bar" | "pie">("bar");
+  const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
   const [summary, setSummary] = useState<AccountSummary | null>({
     mainBalance: 0,
     investmentBalance: 0,
@@ -142,13 +146,13 @@ export default function FinancialTab() {
       setError(null);
 
       try {
-        const res = await axios.get("/api/user/account-summary", {
+        const res = await axios.get('/api/user/account-summary', {
           params: { user_id: client?.id || 0 },
         });
         setSummary(res.data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        setError("Failed to load account summary.");
+        setError('Failed to load account summary.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -167,43 +171,43 @@ export default function FinancialTab() {
   if (!client) return null;
 
   // Calculate total balance
-  const mainBalance = parseFloat(String(summary?.mainBalance) || "0");
-  const demoBalance = parseFloat(client.demo_bal || "0");
-  const bonusAmount = parseFloat(String(client.bonus) || "0");
+  const mainBalance = parseFloat(String(summary?.mainBalance) || '0');
+  const demoBalance = parseFloat(client.demo_bal || '0');
+  const bonusAmount = parseFloat(String(client.bonus) || '0');
   const investmentAmount = summary?.investmentBalance ?? 0;
 
   // Data for pie chart
   const balanceData = [
-    { name: "Investment", value: investmentAmount },
-    { name: "Demo Balance", value: demoBalance },
-    { name: "Main Balance", value: mainBalance },
-    { name: "Bonus", value: bonusAmount },
+    { name: 'Investment', value: investmentAmount },
+    { name: 'Demo Balance', value: demoBalance },
+    { name: 'Main Balance', value: mainBalance },
+    { name: 'Bonus', value: bonusAmount },
   ].filter((item) => item.value > 0);
 
   // Data for bar chart - transactions by type
   const transactionsByType = [
     {
-      name: "Deposit",
+      name: 'Deposit',
       amount: summary?.transactions
-        .filter((t) => String(t.type).toLowerCase() === "deposit")
+        .filter((t) => String(t.type).toLowerCase() === 'deposit')
         .reduce((sum, t) => sum + Number(t.amount), 0),
     },
     {
-      name: "Withdrawal",
+      name: 'Withdrawal',
       amount: summary?.transactions
-        .filter((t) => String(t.type).toLowerCase() === "withdrawal")
+        .filter((t) => String(t.type).toLowerCase() === 'withdrawal')
         .reduce((sum, t) => sum + Number(t.amount), 0),
     },
     {
-      name: "Bonuses",
+      name: 'Bonuses',
       amount: summary?.transactions
-        .filter((t) => String(t.type).toLowerCase() === "bonus")
+        .filter((t) => String(t.type).toLowerCase() === 'bonus')
         .reduce((sum, t) => sum + Number(t.amount), 0),
     },
     {
-      name: "Trades",
+      name: 'Trades',
       amount: summary?.transactions
-        .filter((t) => String(t.type).toLowerCase() === "trade")
+        .filter((t) => String(t.type).toLowerCase() === 'trade')
         .reduce((sum, t) => sum + Number(t.amount), 0),
     },
   ];
@@ -292,16 +296,16 @@ export default function FinancialTab() {
             </div>
             <div className="flex gap-2">
               <Button
-                variant={chartType === "bar" ? "default" : "outline"}
+                variant={chartType === 'bar' ? 'default' : 'outline'}
                 size="icon"
-                onClick={() => setChartType("bar")}
+                onClick={() => setChartType('bar')}
               >
                 <BarChart3 className="h-4 w-4" />
               </Button>
               <Button
-                variant={chartType === "pie" ? "default" : "outline"}
+                variant={chartType === 'pie' ? 'default' : 'outline'}
                 size="icon"
-                onClick={() => setChartType("pie")}
+                onClick={() => setChartType('pie')}
               >
                 <PieChartIcon className="h-4 w-4" />
               </Button>
@@ -309,8 +313,8 @@ export default function FinancialTab() {
           </div>
         </CardHeader>
         <CardContent className="pt-6">
-          <div className="w-full h-[300px]">
-            {chartType === "bar" ? (
+          <div className="w-full h-75">
+            {chartType === 'bar' ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={transactionsByType}
@@ -320,9 +324,9 @@ export default function FinancialTab() {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip
-                    formatter={(value: number) => [
-                      `${formatCurrency(value, client.currency as string)}`,
-                      "Amount",
+                    formatter={(value?: number) => [
+                      formatCurrency(value, client.currency as string),
+                      'Amount',
                     ]}
                   />
                   <Bar dataKey="amount" fill="hsl(var(--chart-1))" />
@@ -337,7 +341,7 @@ export default function FinancialTab() {
                     cy="50%"
                     labelLine={false}
                     label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
+                      `${name}: ${(percent ?? 1 * 100).toFixed(0)}%`
                     }
                     outerRadius={100}
                     fill="#8884d8"
@@ -351,7 +355,7 @@ export default function FinancialTab() {
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value: number) =>
+                    formatter={(value?: number) =>
                       formatCurrency(value, client.currency as string)
                     }
                   />
@@ -366,7 +370,7 @@ export default function FinancialTab() {
             variant="outline"
             size="sm"
             className="gap-2"
-            onClick={() => toast.success("Financial data has been refreshed")}
+            onClick={() => toast.success('Financial data has been refreshed')}
           >
             <RefreshCw className="h-4 w-4" /> Refresh Data
           </Button>
@@ -412,7 +416,7 @@ export default function FinancialTab() {
                       <TransactionStatusBadge status={transaction.status} />
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {format(parseISO(transaction.date), "MMM d, yyyy")}
+                      {format(parseISO(transaction.date), 'MMM d, yyyy')}
                     </TableCell>
                   </TableRow>
                 ))}
