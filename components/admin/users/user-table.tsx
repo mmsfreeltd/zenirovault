@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   ColumnDef,
   flexRender,
@@ -7,7 +7,7 @@ import {
   useReactTable,
   ColumnFiltersState,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -15,41 +15,41 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+// import {
+//   DropdownMenu,
+//   DropdownMenuTrigger,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+// } from "@/components/ui/dropdown-menu";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
-  MoreVerticalIcon,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
+  // MoreVerticalIcon,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { UserSheet } from "@/components/admin/users/user-sheet";
-import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { ClientType } from "@/types";
+} from '@/components/ui/select';
+import { UserSheet } from '@/components/admin/users/user-sheet';
+import { useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import { ClientType } from '@/types';
 
 export const statusColors: Record<string, string> = {
-  active: "text-green-600",
-  inactive: "text-yellow-600",
-  banned: "text-red-600",
-  suspended: "text-orange-600",
+  active: 'text-green-600',
+  inactive: 'text-yellow-600',
+  banned: 'text-red-600',
+  suspended: 'text-orange-600',
 };
 
 export function UserTable({ data: initialData }: { data: ClientType[] }) {
@@ -64,63 +64,63 @@ export function UserTable({ data: initialData }: { data: ClientType[] }) {
 
   const userColumns: ColumnDef<ClientType>[] = [
     {
-      accessorKey: "username",
-      header: "UserName",
+      accessorKey: 'username',
+      header: 'UserName',
       cell: ({ row }) => (
         <div className="font-medium">{row.original.username}</div>
       ),
     },
     {
-      accessorKey: "email",
-      header: "Email",
+      accessorKey: 'email',
+      header: 'Email',
       cell: ({ row }) => (
         <div className="text-muted-foreground">{row.original.email}</div>
       ),
     },
     {
-      accessorKey: "status",
-      header: "Status",
+      accessorKey: 'status',
+      header: 'Status',
       cell: ({ row }) => (
         <Badge variant="outline">{row.original.status_text}</Badge>
       ),
     },
     {
-      accessorKey: "phone",
-      header: "Phone",
+      accessorKey: 'phone',
+      header: 'Phone',
       cell: ({ row }) => (
         <div className="text-sm capitalize">{row.original.phone}</div>
       ),
     },
     {
-      accessorKey: "date_created",
-      header: "Joined",
+      accessorKey: 'date_created',
+      header: 'Joined',
       cell: ({ row }) => (
         <div className="text-xs text-muted-foreground">
           {row.original.date_created
-            ? format(new Date(row.original.date_created), "yyyy-MM-dd")
-            : "—"}
+            ? format(new Date(row.original.date_created), 'yyyy-MM-dd')
+            : '—'}
         </div>
       ),
     },
-    {
-      id: "actions",
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreVerticalIcon className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSelectedUser(row.original)}>
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem>Disable</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    // {
+    //   id: "actions",
+    //   cell: ({ row }) => (
+    //     <DropdownMenu>
+    //       <DropdownMenuTrigger asChild>
+    //         <Button variant="ghost" size="icon">
+    //           <MoreVerticalIcon className="w-4 h-4" />
+    //         </Button>
+    //       </DropdownMenuTrigger>
+    //       <DropdownMenuContent align="end">
+    //         <DropdownMenuItem onClick={() => setSelectedUser(row.original)}>
+    //           Edit
+    //         </DropdownMenuItem>
+    //         <DropdownMenuItem>Disable</DropdownMenuItem>
+    //         <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+    //       </DropdownMenuContent>
+    //     </DropdownMenu>
+    //   ),
+    // },
   ];
 
   const table = useReactTable({
@@ -146,9 +146,9 @@ export function UserTable({ data: initialData }: { data: ClientType[] }) {
       <div className="flex items-center justify-between">
         <Input
           placeholder="Search email..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
           onChange={(e) =>
-            table.getColumn("email")?.setFilterValue(e.target.value)
+            table.getColumn('email')?.setFilterValue(e.target.value)
           }
           className="w-full"
         />
@@ -240,7 +240,7 @@ export function UserTable({ data: initialData }: { data: ClientType[] }) {
             <ChevronLeftIcon className="h-4 w-4" />
           </Button>
           <div className="text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount()}
           </div>
           <Button

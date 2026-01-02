@@ -1,13 +1,13 @@
 // components/user/ReferralInfo.tsx
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { toast } from "sonner";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ClipboardCopyIcon } from "lucide-react";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ClipboardCopyIcon } from 'lucide-react';
 import {
   Table,
   TableHeader,
@@ -15,10 +15,10 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
-import { format } from "date-fns";
-import { useUser } from "@/context/AuthUserContext";
-import { SITE_URL_WITH_HTTPS } from "@/global/constants";
+} from '@/components/ui/table';
+import { format } from 'date-fns';
+import { useUser } from '@/context/AuthUserContext';
+import { SITE_URL_WITH_HTTPS } from '@/global/constants';
 
 type Referral = {
   id: number;
@@ -36,8 +36,8 @@ export function ReferralInfo() {
 
   // Parse code & link
   const referralLink =
-    `${SITE_URL_WITH_HTTPS}/register?code=` + (client?.ref_link && "");
-  const referralCode = client?.ref_link ?? "";
+    `${SITE_URL_WITH_HTTPS}/register?code=` + (client?.ref_link ?? '');
+  const referralCode = client?.ref_link ?? '';
 
   // Fetch downline
   useEffect(() => {
@@ -47,14 +47,14 @@ export function ReferralInfo() {
     axios
       .get<Referral[]>(`/api/user/referrals?user_id=${client.id}`)
       .then((res) => setReferrals(res.data))
-      .catch(() => setError("Failed to load referrals."))
+      .catch(() => setError('Failed to load referrals.'))
       .finally(() => setLoading(false));
   }, [client?.id]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(
-      () => toast.success("Copied to clipboard"),
-      () => toast.error("Copy failed")
+      () => toast.success('Copied to clipboard'),
+      () => toast.error('Copy failed')
     );
   };
 
@@ -70,7 +70,7 @@ export function ReferralInfo() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Code</label>
-            <div className="flex border-1">
+            <div className="flex border">
               <Input readOnly value={referralCode} className="pr-10" />
               <Button
                 variant="ghost"
@@ -84,7 +84,7 @@ export function ReferralInfo() {
           </div>
           <div className="">
             <label className="block text-sm font-medium mb-1">Link</label>
-            <div className="flex border-1">
+            <div className="flex border">
               <Input readOnly value={referralLink} className="pr-10" />
               <Button
                 variant="ghost"
@@ -127,7 +127,7 @@ export function ReferralInfo() {
                       </TableCell>
                       <TableCell>{r.email}</TableCell>
                       <TableCell>
-                        {format(new Date(r.date_created), "yyyy-MM-dd")}
+                        {format(new Date(r.date_created), 'yyyy-MM-dd')}
                       </TableCell>
                     </TableRow>
                   ))}

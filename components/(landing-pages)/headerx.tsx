@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { SITE_NAME } from '@/global/constants';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -92,19 +93,13 @@ export default function Header() {
         <div className="h-16 px-6 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2 font-semibold text-gray-900 dark:text-white">
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill="none"
-              className="text-purple-500"
-            >
-              <path
-                d="M3 12L12 3L21 12L12 21L3 12Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
-            </svg>
+            <Image
+              src="/images/icon.png"
+              alt="favicon"
+              width={20}
+              className="object-cover"
+              height={20}
+            />
             {SITE_NAME}
           </div>
 
@@ -158,9 +153,20 @@ export default function Header() {
           className="h-16 px-6 flex items-center justify-between
           border-b border-gray-200 dark:border-white/10"
         >
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {SITE_NAME}
-          </span>
+          <div className="flex items-center">
+            <div>
+              <Image
+                src="/images/icon.png"
+                alt="favicon"
+                width={20}
+                className="object-cover"
+                height={20}
+              />
+            </div>
+            <span className="font-semibold text-gray-900 dark:text-white ml-1">
+              {SITE_NAME}
+            </span>
+          </div>
           <button
             onClick={() => setOpen(false)}
             className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"

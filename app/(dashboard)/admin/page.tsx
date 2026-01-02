@@ -1,5 +1,5 @@
-import UserTableServer from "@/components/admin/users/user-table-server";
-import { CardComponent } from "@/components/common/section-card";
+import UserTableServer from '@/components/admin/users/user-table-server';
+import { CardComponent } from '@/components/common/section-card';
 
 export default function Page() {
   return (
