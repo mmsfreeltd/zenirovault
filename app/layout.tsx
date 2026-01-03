@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} | Home`,
+  description: `Experience the future of digital trading with ${SITE_NAME} — a secure, intuitive platform built for performance, accessibility, and community-driven growth`,
 };
 export default function RootLayout({
   children,
