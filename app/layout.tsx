@@ -4,7 +4,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from 'sonner';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
-import { SITE_NAME } from '@/global/constants';
+import { LIVE_CHAT, SITE_NAME } from '@/global/constants';
+import Script from 'next/script';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,6 +40,10 @@ export default function RootLayout({
           {children}
           <Toaster />
         </ThemeProvider>
+        <Script
+          id="custom-inline-script"
+          dangerouslySetInnerHTML={{ __html: LIVE_CHAT }}
+        />
       </body>
     </html>
   );
