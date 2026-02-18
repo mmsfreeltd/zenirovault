@@ -1,30 +1,32 @@
 // components/admin/edit-expert-sheet.tsx
-"use client";
+'use client';
 
-import { useState, useEffect, ReactElement } from "react";
-import { useActionState } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, ReactElement } from 'react';
+import { useActionState } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { updateExpert } from "@/server/actions/expert";
-import { SelectCrypto } from "@/components/common/select-crypto";
-import { ExpertType } from "@/types";
+} from '@/components/ui/select';
+import { updateExpert } from '@/server/actions/expert';
+import { SelectCrypto } from '@/components/common/select-crypto';
+import { ExpertType } from '@/types';
+import { FileUpload } from '@/components/common/FileUpload';
+import Image from 'next/image';
 
 export function EditExpertSheet({
   expert,
@@ -34,16 +36,18 @@ export function EditExpertSheet({
   children: ReactElement;
 }) {
   const [open, setOpen] = useState(false);
+  const [tPix, setTPix] = useState(expert.expert_pic); // secure_url from FileUpload
+  const [publicId, setPublicId] = useState(''); // for potential replace
   const [needPayment, setNeedPayment] = useState(expert.needPayment === 1);
   const router = useRouter();
   const [state, action, isPending] = useActionState(updateExpert, {
     success: false,
-    message: "",
+    message: '',
   });
 
   useEffect(() => {
     if (state.message) {
-      toast[state.success ? "success" : "error"](state.message);
+      toast[state.success ? 'success' : 'error'](state.message);
     }
     if (state.success) {
       setOpen(false);
@@ -62,7 +66,7 @@ export function EditExpertSheet({
         {children}
       </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet modal={false} open={open} onOpenChange={setOpen}>
         <SheetContent className="overflow-auto">
           <SheetHeader>
             <SheetTitle>Edit Expert</SheetTitle>
@@ -72,7 +76,28 @@ export function EditExpertSheet({
           <div className="px-5">
             <form action={action} className="space-y-4 pt-4">
               <input type="hidden" name="id" value={expert.id} />
+              <input type="hidden" name="expert_pic" value={tPix} />
+              <input type="hidden" name="public_id" value={publicId} />
 
+              <div className="space-y-2">
+                <Label>Photo</Label>
+                <FileUpload
+                  folder="expert_photos"
+                  onUploadComplete={({ secure_url, public_id }) => {
+                    setTPix(secure_url);
+                    setPublicId(public_id);
+                  }}
+                />
+                {tPix && (
+                  <Image
+                    width={50}
+                    height={50}
+                    src={tPix}
+                    alt="preview"
+                    className="h-20 w-20 rounded object-cover mt-2"
+                  />
+                )}
+              </div>
               <div>
                 <Label>Expert Name</Label>
                 <Input
@@ -110,8 +135,8 @@ export function EditExpertSheet({
                 <Label>Needs Payment?</Label>
                 <Select
                   name="needPayment"
-                  defaultValue={expert.needPayment === 1 ? "yes" : "no"}
-                  onValueChange={(v) => setNeedPayment(v === "yes")}
+                  defaultValue={expert.needPayment === 1 ? 'yes' : 'no'}
+                  onValueChange={(v) => setNeedPayment(v === 'yes')}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select" />
@@ -130,7 +155,7 @@ export function EditExpertSheet({
                     <SelectCrypto
                       onChange={(val) => {
                         const input =
-                          document.querySelector<HTMLInputElement>("#coin_id");
+                          document.querySelector<HTMLInputElement>('#coin_id');
                         if (input) input.value = val;
                       }}
                     />
@@ -138,14 +163,14 @@ export function EditExpertSheet({
                       type="hidden"
                       name="coin_id"
                       id={`coin_id_${expert.id}`}
-                      defaultValue={expert.coin_id ?? ""}
+                      defaultValue={expert.coin_id ?? ''}
                     />
                   </div>
                   <div>
                     <Label>Payment Address</Label>
                     <Input
                       name="payment_address"
-                      defaultValue={expert.payment_address ?? ""}
+                      defaultValue={expert.payment_address ?? ''}
                       required
                     />
                   </div>
@@ -153,7 +178,7 @@ export function EditExpertSheet({
                     <Label>Payment Description</Label>
                     <Input
                       name="payment_desc"
-                      defaultValue={expert.payment_desc ?? ""}
+                      defaultValue={expert.payment_desc ?? ''}
                       required
                     />
                   </div>
@@ -162,7 +187,7 @@ export function EditExpertSheet({
 
               <div className="flex justify-end pt-2">
                 <Button type="submit" disabled={isPending}>
-                  {isPending ? "Saving..." : "Save Changes"}
+                  {isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </div>
             </form>

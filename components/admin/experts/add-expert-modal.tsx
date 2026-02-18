@@ -1,7 +1,7 @@
 // components/admin/add-expert-modal.tsx
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTrigger,
@@ -10,36 +10,42 @@ import {
   DialogTitle,
   DialogFooter,
   DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { useActionState } from "react";
-import { toast } from "sonner";
-import { createExpert } from "@/server/actions/expert";
-import { useRouter } from "next/navigation";
-import { SelectCrypto } from "@/components/common/select-crypto";
+} from '@/components/ui/select';
+import { useActionState } from 'react';
+import { toast } from 'sonner';
+import { createExpert } from '@/server/actions/expert';
+import { useRouter } from 'next/navigation';
+import { SelectCrypto } from '@/components/common/select-crypto';
+import { FileUpload } from '@/components/common/FileUpload';
+import Image from 'next/image';
 
 export default function AddExpertModal() {
   const [open, setOpen] = useState(false);
   const [needPayment, setNeedPayment] = useState(false);
+  const [tPix, setTPix] = useState(''); // secure_url from FileUpload
+  const [publicId, setPublicId] = useState(''); // for potential replace
+
   const router = useRouter();
   const [state, action, isPending] = useActionState(createExpert, {
     success: false,
-    message: "",
+    message: '',
   });
 
   // handle toast + close + refresh
   useEffect(() => {
     if (state.message) {
-      toast[state.success ? "success" : "error"](state.message);
+      toast[state.success ? 'success' : 'error'](state.message);
     }
     if (state.success) {
       setOpen(false);
@@ -48,16 +54,39 @@ export default function AddExpertModal() {
   }, [state, router]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog modal={false} open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Add Expert</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        className="max-w-md"
+        // allow clicks through to the Cloudinary iframe
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogDescription></DialogDescription>
         <DialogHeader>
           <DialogTitle>Add New Expert</DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-4">
+          <div className="space-y-2">
+            <Label>Photo</Label>
+            <FileUpload
+              folder="expert_photos"
+              onUploadComplete={({ secure_url, public_id }) => {
+                setTPix(secure_url);
+                setPublicId(public_id);
+              }}
+            />
+            {tPix && (
+              <Image
+                width={50}
+                height={50}
+                src={tPix}
+                alt="preview"
+                className="h-20 w-20 rounded object-cover mt-2"
+              />
+            )}
+          </div>
           <div>
             <Label>Expert Name</Label>
             <Input name="expert_name" required />
@@ -78,7 +107,7 @@ export default function AddExpertModal() {
             <Label>Needs Payment?</Label>
             <Select
               name="needPayment"
-              onValueChange={(v) => setNeedPayment(v === "yes")}
+              onValueChange={(v) => setNeedPayment(v === 'yes')}
               defaultValue="no"
             >
               <SelectTrigger className="w-full">
@@ -91,6 +120,10 @@ export default function AddExpertModal() {
             </Select>
           </div>
 
+          {/* Hidden fields for server‐action */}
+          <input type="hidden" name="expert_pic" value={tPix} />
+          <input type="hidden" name="public_id" value={publicId} />
+
           {needPayment && (
             <>
               <div>
@@ -98,7 +131,7 @@ export default function AddExpertModal() {
                 <SelectCrypto
                   onChange={(val) => {
                     const input =
-                      document.querySelector<HTMLInputElement>("#coin_id");
+                      document.querySelector<HTMLInputElement>('#coin_id');
                     if (input) input.value = val;
                   }}
                 />
@@ -116,15 +149,11 @@ export default function AddExpertModal() {
           )}
 
           <DialogFooter className="flex justify-end space-x-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Adding..." : "Add Expert"}
+              {isPending ? 'Adding...' : 'Add Expert'}
             </Button>
           </DialogFooter>
         </form>

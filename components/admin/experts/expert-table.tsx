@@ -1,5 +1,5 @@
 // components/admin/expert-table.tsx
-"use client";
+'use client';
 
 import {
   ColumnDef,
@@ -9,7 +9,7 @@ import {
   getFilteredRowModel,
   useReactTable,
   ColumnFiltersState,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import {
   Table,
   TableHeader,
@@ -17,28 +17,29 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import { EditExpertSheet } from "./edit-expert-sheet";
-import { DeleteExpertAction } from "@/components/admin/experts/delete-expert-action"; // see below
-import { useState, useEffect } from "react";
-import { ExpertType } from "@/types";
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { EditExpertSheet } from './edit-expert-sheet';
+import { DeleteExpertAction } from '@/components/admin/experts/delete-expert-action'; // see below
+import { useState, useEffect } from 'react';
+import { ExpertType } from '@/types';
+import Image from 'next/image';
 
 export default function ExpertTable({
   data: initialData,
@@ -51,36 +52,49 @@ export default function ExpertTable({
 
   const columns: ColumnDef<ExpertType>[] = [
     {
-      accessorKey: "expert_name",
-      header: "Expert Name",
+      accessorKey: 'expert_pic',
+      header: 'Photo',
+      cell: ({ row }) => (
+        <Image
+          width={20}
+          height={20}
+          src={row.original.expert_pic as string}
+          alt={row.original.expert_name as string}
+          className="h-12 w-12 rounded-full object-cover"
+        />
+      ),
+    },
+    {
+      accessorKey: 'expert_name',
+      header: 'Expert Name',
       cell: ({ row }) => (
         <div className="font-medium">{row.original.expert_name}</div>
       ),
     },
     {
-      accessorKey: "expert_win",
-      header: "Won Trades",
+      accessorKey: 'expert_win',
+      header: 'Won Trades',
     },
     {
-      accessorKey: "profit_share",
-      header: "Profits",
+      accessorKey: 'profit_share',
+      header: 'Profits',
     },
     {
-      accessorKey: "country",
-      header: "Country",
+      accessorKey: 'country',
+      header: 'Country',
     },
     {
-      accessorKey: "needPayment",
-      header: "Needs Payment",
+      accessorKey: 'needPayment',
+      header: 'Needs Payment',
       cell: ({ row }) => (
         <Badge variant="outline">
-          {row.original.needPayment === 1 ? "Yes" : "No"}
+          {row.original.needPayment === 1 ? 'Yes' : 'No'}
         </Badge>
       ),
     },
     {
-      id: "actions",
-      header: "Actions",
+      id: 'actions',
+      header: 'Actions',
       cell: ({ row }) => (
         <div className="flex space-x-1">
           <EditExpertSheet expert={row.original}>
@@ -115,10 +129,10 @@ export default function ExpertTable({
         <Input
           placeholder="Search name or country..."
           value={
-            (table.getColumn("expert_name")?.getFilterValue() as string) ?? ""
+            (table.getColumn('expert_name')?.getFilterValue() as string) ?? ''
           }
           onChange={(e) =>
-            table.getColumn("expert_name")?.setFilterValue(e.target.value)
+            table.getColumn('expert_name')?.setFilterValue(e.target.value)
           }
           className="w-full max-w-sm"
         />
@@ -133,7 +147,7 @@ export default function ExpertTable({
                   <TableHead key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableHead>
                 ))}
@@ -148,7 +162,7 @@ export default function ExpertTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -203,7 +217,7 @@ export default function ExpertTable({
             <ChevronLeftIcon className="h-4 w-4" />
           </Button>
           <div className="text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount()}
           </div>
           <Button

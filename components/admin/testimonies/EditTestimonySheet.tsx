@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // components/admin/testimonies/EditTestimonySheet.tsx
-"use client";
+'use client';
 
-import { useState, useEffect, cloneElement, ReactElement } from "react";
-import { useActionState } from "react";
-import { toast } from "sonner";
+import { useState, useEffect, cloneElement, ReactElement } from 'react';
+import { useActionState } from 'react';
+import { toast } from 'sonner';
 import {
   Sheet,
   SheetContent,
@@ -14,15 +14,15 @@ import {
   SheetDescription,
   SheetFooter,
   SheetClose,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { FileUpload } from "@/components/common/FileUpload";
-import { updateTestimony } from "@/server/actions/testimony";
-import { TestimonyType } from "./TestimonyTable";
-import Image from "next/image";
+} from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FileUpload } from '@/components/common/FileUpload';
+import { updateTestimony } from '@/server/actions/testimony';
+import { TestimonyType } from './TestimonyTable';
+import Image from 'next/image';
 
 interface Props {
   testimony: TestimonyType;
@@ -43,12 +43,12 @@ export function EditTestimonySheet({ testimony, children }: Props) {
   // Action state for updateTestimony
   const [state, formAction, isPending] = useActionState(updateTestimony, {
     success: false,
-    message: "",
+    message: '',
   });
 
   useEffect(() => {
     if (state.message) {
-      toast[state.success ? "success" : "error"](state.message);
+      toast[state.success ? 'success' : 'error'](state.message);
     }
     if (state.success) {
       setOpen(false); // close the sheet on success
@@ -67,7 +67,7 @@ export function EditTestimonySheet({ testimony, children }: Props) {
     <>
       {trigger}
 
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet modal={false} open={open} onOpenChange={setOpen}>
         {/* We don't need a separate <SheetTrigger> here because we've already cloned the trigger above. */}
         <SheetContent className="max-w-md overflow-auto">
           <SheetHeader>
@@ -148,7 +148,7 @@ export function EditTestimonySheet({ testimony, children }: Props) {
                 <Button variant="outline">Cancel</Button>
               </SheetClose>
               <Button type="submit" disabled={isPending || !tpix}>
-                {isPending ? "Saving…" : "Save Changes"}
+                {isPending ? 'Saving…' : 'Save Changes'}
               </Button>
             </SheetFooter>
           </form>

@@ -1,8 +1,8 @@
 // components/admin/testimonies/TestimonyTable.tsx
-"use client";
+'use client';
 
-import { useEffect, useState, useMemo } from "react";
-import axios from "axios";
+import { useEffect, useState, useMemo } from 'react';
+import axios from 'axios';
 import {
   ColumnDef,
   flexRender,
@@ -11,7 +11,7 @@ import {
   getPaginationRowModel,
   useReactTable,
   ColumnFiltersState,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 import {
   Table,
   TableHeader,
@@ -19,21 +19,21 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { AddTestimonyModal } from "./AddTestimonyModal";
-import { EditTestimonySheet } from "./EditTestimonySheet";
-import { DeleteTestimonyAction } from "./DeleteTestimonyAction";
-import Image from "next/image";
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { AddTestimonyModal } from './AddTestimonyModal';
+import { EditTestimonySheet } from './EditTestimonySheet';
+import { DeleteTestimonyAction } from './DeleteTestimonyAction';
+import Image from 'next/image';
 
 // Define the type for a Testimony
 export type TestimonyType = {
@@ -61,8 +61,8 @@ export default function AdminTestimonyTable({ initialData }: Props) {
   const columns = useMemo<ColumnDef<TestimonyType>[]>(
     () => [
       {
-        accessorKey: "tpix",
-        header: "Photo",
+        accessorKey: 'tpix',
+        header: 'Photo',
         cell: ({ row }) => (
           <Image
             width={20}
@@ -74,20 +74,20 @@ export default function AdminTestimonyTable({ initialData }: Props) {
         ),
       },
       {
-        accessorKey: "tname",
-        header: "Name",
+        accessorKey: 'tname',
+        header: 'Name',
         cell: ({ row }) => (
           <span className="font-medium">{row.original.tname}</span>
         ),
       },
       {
-        accessorKey: "toccupation",
-        header: "Occupation",
+        accessorKey: 'toccupation',
+        header: 'Occupation',
         cell: ({ row }) => <span>{row.original.toccupation}</span>,
       },
       {
-        accessorKey: "tdescription",
-        header: "Description",
+        accessorKey: 'tdescription',
+        header: 'Description',
         cell: ({ row }) => (
           <span className="line-clamp-2 text-sm text-muted-foreground">
             {row.original.tdescription}
@@ -95,8 +95,8 @@ export default function AdminTestimonyTable({ initialData }: Props) {
         ),
       },
       {
-        id: "actions",
-        header: "Actions",
+        id: 'actions',
+        header: 'Actions',
         cell: ({ row }) => (
           <div className="flex items-center space-x-2">
             <EditTestimonySheet testimony={row.original}>
@@ -109,7 +109,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
         ),
       },
     ],
-    []
+    [],
   );
 
   const table = useReactTable({
@@ -126,10 +126,10 @@ export default function AdminTestimonyTable({ initialData }: Props) {
   // Handler to refetch all after any mutation
   async function refreshData() {
     try {
-      const res = await axios.get<TestimonyType[]>("/api/testimonies");
+      const res = await axios.get<TestimonyType[]>('/api/testimonies');
       setData(res.data);
     } catch (err) {
-      console.error("Failed to reload testimonies", err);
+      console.error('Failed to reload testimonies', err);
     }
   }
 
@@ -139,9 +139,9 @@ export default function AdminTestimonyTable({ initialData }: Props) {
       <div className="flex items-center justify-between">
         <Input
           placeholder="Search name..."
-          value={(table.getColumn("tname")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn('tname')?.getFilterValue() as string) ?? ''}
           onChange={(e) =>
-            table.getColumn("tname")?.setFilterValue(e.target.value)
+            table.getColumn('tname')?.setFilterValue(e.target.value)
           }
           className="w-1/3"
         />
@@ -158,7 +158,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
                   <TableHead key={header.id}>
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </TableHead>
                 ))}
@@ -173,7 +173,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -220,7 +220,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            {"«"}
+            {'«'}
           </Button>
           <Button
             variant="outline"
@@ -228,10 +228,10 @@ export default function AdminTestimonyTable({ initialData }: Props) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            {"‹"}
+            {'‹'}
           </Button>
           <span className="text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount()}
           </span>
           <Button
@@ -240,7 +240,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            {"›"}
+            {'›'}
           </Button>
           <Button
             variant="outline"
@@ -248,7 +248,7 @@ export default function AdminTestimonyTable({ initialData }: Props) {
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            {"»"}
+            {'»'}
           </Button>
         </div>
       </div>
