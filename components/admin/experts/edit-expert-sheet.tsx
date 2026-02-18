@@ -76,8 +76,8 @@ export function EditExpertSheet({
           <div className="px-5">
             <form action={action} className="space-y-4 pt-4">
               <input type="hidden" name="id" value={expert.id} />
-              <input type="hidden" name="expert_pic" value={tPix} />
-              <input type="hidden" name="public_id" value={publicId} />
+              <input type="hidden" name="expert_pic" value={tPix as string} />
+              <input type="hidden" name="public_id" value={publicId as string} />
 
               <div className="space-y-2">
                 <Label>Photo</Label>

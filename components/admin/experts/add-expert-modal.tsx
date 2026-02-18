@@ -121,8 +121,8 @@ export default function AddExpertModal() {
           </div>
 
           {/* Hidden fields for server‐action */}
-          <input type="hidden" name="expert_pic" value={tPix} />
-          <input type="hidden" name="public_id" value={publicId} />
+          <input type="hidden" name="expert_pic" value={tPix as string} />
+          <input type="hidden" name="public_id" value={publicId as string} />
 
           {needPayment && (
             <>
